@@ -1,5 +1,10 @@
 plugins {
-    id 'java'
+    id 'jacoco'
+    id 'checkstyle'
+    id 'application'
+    id 'io.freefair.lombok' version('8.4')
+    id 'com.github.ben-manes.versions' version ('0.50.0')
+    id 'com.github.johnrengelman.shadow' version ('8.1.1')
 }
 
 group = 'hexlet.code'
@@ -9,11 +14,36 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = 'hexlet.code.App'
+}
+
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.9.1')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
+    testImplementation platform("org.junit:junit-bom:5.10.1")
+    testImplementation "org.junit.jupiter:junit-jupiter"
+    testImplementation "org.assertj:assertj-core:3.19.0"
 }
 
 test {
     useJUnitPlatform()
+}
+
+dependencies {
+    implementation 'info.picocli:picocli:4.7.5'
+    implementation 'org.apache.commons:commons-lang3:3.14.0'
+    implementation 'org.apache.commons:commons-collections4:4.4'
+}
+
+jacocoTestReport {
+    reports {
+        xml.required = true
+    }
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        showStandardStreams = true
+        events = ["passed", "failed", "skipped"]
+    }
 }
