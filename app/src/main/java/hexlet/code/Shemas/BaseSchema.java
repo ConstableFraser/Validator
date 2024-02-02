@@ -1,5 +1,5 @@
 package hexlet.code.Shemas;
 
-public interface BaseSchema {
-    Boolean isValid(Object obj);
+public abstract class BaseSchema<T> {
+    public abstract Boolean isValid(T obj);
 }

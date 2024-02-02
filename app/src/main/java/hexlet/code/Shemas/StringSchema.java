@@ -4,20 +4,19 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 
-public class StringSchema implements BaseSchema {
+public class StringSchema extends BaseSchema<String> {
     private Predicate<String> isContains;
-    private Predicate<String> isValidRequired;
+    private Predicate<String> isRequired;
     private Predicate<String> isGreaterMin;
     private final Map<String, Predicate<String>> listChecks;
-    private Boolean isRequired = false;
 
     public StringSchema() {
-        isValidRequired = (s) -> true;
+        isRequired = (s) -> true;
         isContains = (s) -> true;
         isGreaterMin = (s) -> true;
 
         listChecks = new HashMap<>();
-        listChecks.put("isValidRequired", isValidRequired);
+        listChecks.put("isRequired", isRequired);
         listChecks.put("isContains", isContains);
         listChecks.put("isGreaterMin", isGreaterMin);
     }
@@ -35,19 +34,13 @@ public class StringSchema implements BaseSchema {
     }
 
     public StringSchema required() {
-        isRequired = true;
-        isValidRequired = (s) -> (!s.isEmpty() && isRequired);
-        listChecks.put("isValidRequired", isValidRequired);
+        isRequired = (s) -> (s != null && !s.isEmpty());
+        listChecks.put("isRequired", isRequired);
         return this;
     }
 
     @Override
-    public Boolean isValid(Object obj) {
-        if ((obj != null) && !(obj instanceof String)) {
-            return false;
-        }
-        String value = obj == null ? "" : (String) obj;
-
+    public Boolean isValid(String value) {
         return listChecks.values()
                 .stream()
                 .allMatch(check -> check.test(value));
