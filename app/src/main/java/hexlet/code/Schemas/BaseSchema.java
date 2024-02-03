@@ -1,4 +1,4 @@
-package hexlet.code.Shemas;
+package hexlet.code.Schemas;
 
 public abstract class BaseSchema<T> {
     public abstract Boolean isValid(T obj);
