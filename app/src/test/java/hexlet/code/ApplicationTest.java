@@ -1,8 +1,10 @@
 package hexlet.code;
 
+import hexlet.code.Shemas.BaseSchema;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -69,6 +71,7 @@ public class ApplicationTest {
         assertEquals(schema, schema.required());
         assertEquals(false, schema.isValid(null));
         assertEquals(true, schema.isValid(new HashMap<>()));
+
         var data = new HashMap<String, String>();
         data.put("key1", "value1");
         assertEquals(true, schema.isValid(data));
@@ -77,5 +80,41 @@ public class ApplicationTest {
         assertEquals(false, schema.isValid(data));
         data.put("key2", "value2");
         assertEquals(true, schema.isValid(data));
+    }
+
+    @Test
+    void testMethodsShapeMap() {
+        Validator v = new Validator();
+
+        var schema = v.map();
+        Map<String, BaseSchema<String>> schemas = new HashMap<>();
+        schemas.put("firstName", v.string().required());
+        schemas.put("surName", v.string());
+        schemas.put("lastName", v.string().required().minLength(2));
+
+        assertEquals(schema, schema.shape(schemas));
+
+        Map<String, String> person1 = new HashMap<>();
+        person1.put("firstName", "Li");
+        person1.put("surName", "");
+        person1.put("lastName", "Bu");
+        assertEquals(true, schema.isValid(person1));
+
+
+        schemas.put("firstName", v.string().required());
+        schemas.remove("surName");
+        schemas.put("lastName", v.string().required());
+
+        schema.shape(schemas);
+
+        Map<String, String> person2 = new HashMap<>();
+        person2.put("firstName", "Anthony");
+        person2.put("lastName", null);
+        assertEquals(false, schema.isValid(person2));
+
+        Map<String, String> person3 = new HashMap<>();
+        person3.put("firstName", "Anna");
+        person3.put("lastName", "");
+        assertEquals(false, schema.isValid(person3));
     }
 }

@@ -4,36 +4,43 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class MapSchema extends BaseSchema<Map<?, ?>> {
-    private Predicate<Map<?, ?>> isNotNull;
-    private Predicate<Map<?, ?>> isCorrectSizing;
-    private final Map<String, Predicate<Map<?, ?>>> listChecks;
+public class MapSchema extends BaseSchema<Map<String, String>> {
+    private final Map<String, Predicate<Map<?, ?>>> listChecksMap;
+    private Map<String, BaseSchema<String>> listChecksValues;
 
     public MapSchema() {
-        isNotNull = (s) -> true;
-        isCorrectSizing = (s) -> true;
-
-        listChecks = new HashMap<>();
-        listChecks.put("isRequired", isNotNull);
-        listChecks.put("isCorrectSizing", isCorrectSizing);
+        listChecksMap = new HashMap<>();
+        listChecksMap.put("isRequired", (s) -> true);
+        listChecksMap.put("isCorrectSizing", (s) -> true);
     }
 
     public MapSchema required() {
-        isNotNull = (n) -> !(n == null);
-        listChecks.put("isRequired", isNotNull);
+        listChecksMap.put("isRequired", (n) -> !(n == null));
         return this;
     }
 
     public MapSchema sizeof(int size) {
-        isCorrectSizing = (n) -> (n.size() == size);
-        listChecks.put("isCorrectSizing", isCorrectSizing);
+        listChecksMap.put("isCorrectSizing", (n) -> (n.size() == size));
+        return this;
+    }
+
+    public MapSchema shape(Map<String, BaseSchema<String>> schemas) {
+        listChecksValues = new HashMap<>(schemas);
         return this;
     }
 
     @Override
-    public Boolean isValid(Map<?, ?> value) {
-        return listChecks.values()
+    public Boolean isValid(Map<String, String> mapForVerifying) {
+        boolean isValidMap = listChecksMap.values()
                 .stream()
-                .allMatch(check -> check.test(value));
+                .allMatch(check -> check.test(mapForVerifying));
+
+        if (mapForVerifying == null || listChecksValues == null) {
+            return isValidMap;
+        }
+
+        return isValidMap && mapForVerifying.entrySet()
+                .stream()
+                .allMatch((e) -> (listChecksValues.get(e.getKey()).isValid(e.getValue())));
     }
 }

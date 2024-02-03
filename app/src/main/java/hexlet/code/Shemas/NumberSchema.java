@@ -5,37 +5,27 @@ import java.util.Map;
 import java.util.function.Predicate;
 
 public class NumberSchema extends BaseSchema<Integer> {
-    private Predicate<Integer> isNotNull;
-    private Predicate<Integer> isPositive;
-    private Predicate<Integer> inRange;
     private final Map<String, Predicate<Integer>> listChecks;
 
     public NumberSchema() {
-        isNotNull = (s) -> true;
-        isPositive = (s) -> true;
-        inRange = (s) -> true;
-
         listChecks = new HashMap<>();
-        listChecks.put("isRequired", isNotNull);
-        listChecks.put("isPositive", isPositive);
-        listChecks.put("inRange", inRange);
+        listChecks.put("isRequired", (s) -> true);
+        listChecks.put("isPositive", (s) -> true);
+        listChecks.put("inRange", (s) -> true);
     }
 
     public NumberSchema required() {
-        isNotNull = (n) -> !(n == null);
-        listChecks.put("isRequired", isNotNull);
+        listChecks.put("isRequired", (n) -> !(n == null));
         return this;
     }
 
     public NumberSchema positive() {
-        isPositive = (n) -> (n == null || n > 0);
-        listChecks.put("isPositive", isPositive);
+        listChecks.put("isPositive", (n) -> (n == null || n > 0));
         return this;
     }
 
     public NumberSchema range(int min, int max) {
-        inRange = (n) -> (n >= min && n <= max);
-        listChecks.put("inRange", inRange);
+        listChecks.put("inRange", (n) -> (n >= min && n <= max));
         return this;
     }
 

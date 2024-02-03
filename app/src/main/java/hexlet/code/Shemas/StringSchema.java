@@ -5,37 +5,27 @@ import java.util.function.Predicate;
 
 
 public class StringSchema extends BaseSchema<String> {
-    private Predicate<String> isContains;
-    private Predicate<String> isRequired;
-    private Predicate<String> isGreaterMin;
     private final Map<String, Predicate<String>> listChecks;
 
     public StringSchema() {
-        isRequired = (s) -> true;
-        isContains = (s) -> true;
-        isGreaterMin = (s) -> true;
-
         listChecks = new HashMap<>();
-        listChecks.put("isRequired", isRequired);
-        listChecks.put("isContains", isContains);
-        listChecks.put("isGreaterMin", isGreaterMin);
+        listChecks.put("isRequired", (s) -> true);
+        listChecks.put("isContains", (s) -> true);
+        listChecks.put("isGreaterMin", (s) -> true);
     }
 
     public StringSchema contains(String searchString) {
-        isContains = (s) -> s.contains(searchString);
-        listChecks.put("isContains", isContains);
+        listChecks.put("isContains", (s) -> s.contains(searchString));
         return this;
     }
 
     public StringSchema minLength(int minLength) {
-        isGreaterMin = (s) -> s.length() >= minLength;
-        listChecks.put("isGreaterMin", isGreaterMin);
+        listChecks.put("isGreaterMin", (s) -> s.length() >= minLength);
         return this;
     }
 
     public StringSchema required() {
-        isRequired = (s) -> (s != null && !s.isEmpty());
-        listChecks.put("isRequired", isRequired);
+        listChecks.put("isRequired", (s) -> (s != null && !s.isEmpty()));
         return this;
     }
 
