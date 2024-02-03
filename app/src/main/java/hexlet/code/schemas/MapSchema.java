@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class MapSchema extends BaseSchema<Map<String, String>> {
+public final class MapSchema extends BaseSchema<Map<String, String>> {
     private final Map<String, Predicate<Map<String, String>>> listChecksMap;
     private Map<String, BaseSchema<String>> listChecksValues;
 
