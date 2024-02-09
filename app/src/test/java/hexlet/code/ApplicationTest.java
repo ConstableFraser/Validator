@@ -91,7 +91,6 @@ public class ApplicationTest {
         schemas.put("firstName", v.string().required());
         schemas.put("surName", v.string());
         schemas.put("lastName", v.string().required().minLength(2));
-
         assertEquals(schema, schema.shape(schemas));
 
         Map<String, String> person1 = new HashMap<>();
@@ -104,7 +103,6 @@ public class ApplicationTest {
         schemas.put("firstName", v.string().required());
         schemas.remove("surName");
         schemas.put("lastName", v.string().required());
-
         schema.shape(schemas);
 
         Map<String, String> person2 = new HashMap<>();

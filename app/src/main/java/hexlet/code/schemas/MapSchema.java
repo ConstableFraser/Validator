@@ -2,25 +2,22 @@ package hexlet.code.schemas;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Predicate;
 
 public final class MapSchema extends BaseSchema<Map<String, String>> {
-    private final Map<String, Predicate<Map<String, String>>> listChecksMap;
     private Map<String, BaseSchema<String>> listChecksValues;
 
     public MapSchema() {
-        listChecksMap = new HashMap<>();
-        listChecksMap.put("isRequired", (s) -> true);
-        listChecksMap.put("isCorrectSizing", (s) -> true);
+        checks.put("isRequired", (s) -> true);
+        checks.put("isCorrectSizing", (s) -> true);
     }
 
     public MapSchema required() {
-        listChecksMap.put("isRequired", (n) -> !(n == null));
+        addCheck("isRequired", (n) -> !(n == null));
         return this;
     }
 
     public MapSchema sizeof(int size) {
-        listChecksMap.put("isCorrectSizing", (n) -> (n.size() == size));
+        addCheck("isCorrectSizing", (n) -> (n != null && n.size() == size));
         return this;
     }
 
@@ -31,7 +28,7 @@ public final class MapSchema extends BaseSchema<Map<String, String>> {
 
     @Override
     public Boolean isValid(Map<String, String> mapForVerifying) {
-        boolean isValidMap = listChecksMap.values()
+        boolean isValidMap = checks.values()
                 .stream()
                 .allMatch(check -> check.test(mapForVerifying));
 
