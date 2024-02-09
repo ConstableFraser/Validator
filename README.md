@@ -2,3 +2,21 @@
 [![Actions Status](https://github.com/ConstableFraser/java-project-78/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/ConstableFraser/java-project-78/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/1a4fe2773eae4dbac527/maintainability)](https://codeclimate.com/github/ConstableFraser/java-project-78/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/1a4fe2773eae4dbac527/test_coverage)](https://codeclimate.com/github/ConstableFraser/java-project-78/test_coverage)
+
+# PROJECT "VALIDATOR"
+this is an educational project to create a software library
+
+## key features
+1. The library is extensible. The consumer can create their own types of checks
+2. Three ready-made ckecks "in box": string, integer, map
+
+## how it works
+// TODO
+
+## demo version
+// TODO
+
+## tech stack
+Java core: collections, stream API, functional interface;
+Unit tests: JUnit (jupiter) and assertj, Jacoco;
+Linter: checkstyle.
