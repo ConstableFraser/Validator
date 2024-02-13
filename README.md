@@ -41,7 +41,7 @@ schema.isValid(9); // true
 ```
 
 ## diagram class
-![Diagram](media/DiagramClass.png)
+![Diagram](app/media/DiagramClass.png)
 
 ## tech stack
 Java core: collections, stream API, functional interface;\
