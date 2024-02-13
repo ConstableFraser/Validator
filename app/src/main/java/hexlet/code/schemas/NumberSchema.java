@@ -22,11 +22,4 @@ public final class NumberSchema extends BaseSchema<Integer> {
         addCheck("inRange", (n) -> (n >= min && n <= max));
         return this;
     }
-
-    @Override
-    public Boolean isValid(Integer value) {
-        return checks.values()
-                .stream()
-                .allMatch(check -> check.test(value));
-    }
 }

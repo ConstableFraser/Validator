@@ -6,9 +6,13 @@ import java.util.function.Predicate;
 
 public abstract class BaseSchema<T> {
     protected Map<String, Predicate<T>> checks = new LinkedHashMap<>();
-    protected String required = "isRequired";
+    protected final String required = "isRequired";
     protected final void addCheck(String nameCheck, Predicate<T> condition) {
         checks.put(nameCheck, condition);
     }
-    public abstract Boolean isValid(T obj);
+    public final Boolean isValid(T obj) {
+        return checks.values()
+                .stream()
+                .allMatch(check -> check.test(obj));
+    }
 }

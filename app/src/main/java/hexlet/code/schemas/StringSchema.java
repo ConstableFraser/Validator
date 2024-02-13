@@ -22,11 +22,4 @@ public final class StringSchema extends BaseSchema<String> {
         addCheck(required, (s) -> (s != null && !s.isEmpty()));
         return this;
     }
-
-    @Override
-    public Boolean isValid(String value) {
-        return checks.values()
-                .stream()
-                .allMatch(check -> check.test(value));
-    }
 }

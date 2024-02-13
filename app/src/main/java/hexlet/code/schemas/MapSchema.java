@@ -1,14 +1,13 @@
 package hexlet.code.schemas;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public final class MapSchema extends BaseSchema<Map<String, String>> {
-    private Map<String, BaseSchema<String>> listChecksValues;
 
     public MapSchema() {
         checks.put("isRequired", (s) -> true);
         checks.put("isCorrectSizing", (s) -> true);
+        checks.put("isCorrectValue", (s) -> true);
     }
 
     public MapSchema required() {
@@ -22,22 +21,9 @@ public final class MapSchema extends BaseSchema<Map<String, String>> {
     }
 
     public MapSchema shape(Map<String, BaseSchema<String>> schemas) {
-        listChecksValues = new HashMap<>(schemas);
+        addCheck("isCorrectValue", (map) -> map.entrySet()
+                .stream()
+                .allMatch((e) -> (schemas.get(e.getKey()).isValid(e.getValue()))));
         return this;
-    }
-
-    @Override
-    public Boolean isValid(Map<String, String> mapForVerifying) {
-        boolean isValidMap = checks.values()
-                .stream()
-                .allMatch(check -> check.test(mapForVerifying));
-
-        if (mapForVerifying == null || listChecksValues == null) {
-            return isValidMap;
-        }
-
-        return isValidMap && mapForVerifying.entrySet()
-                .stream()
-                .allMatch((e) -> (listChecksValues.get(e.getKey()).isValid(e.getValue())));
     }
 }
