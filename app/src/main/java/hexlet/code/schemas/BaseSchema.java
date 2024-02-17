@@ -6,7 +6,6 @@ import java.util.function.Predicate;
 
 public abstract class BaseSchema<T> {
     protected Map<String, Predicate<T>> checks = new LinkedHashMap<>();
-    protected final String required = "isRequired";
     protected final void addCheck(String nameCheck, Predicate<T> condition) {
         checks.put(nameCheck, condition);
     }
